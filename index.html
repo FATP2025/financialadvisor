@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Tax Planner Tool</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+</head>
+<body>
+    {% include 'includes/navbar.html' %}
+
+    <main class="container my-5">
+        <!-- Hero section -->
+        <section class="text-center mb-5">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h1 class="display-5 fw-bold mb-4">Tax Planning & Investment Tool</h1>
+                    <p class="lead mb-4">
+                        Compare tax regimes, get personalized investment advice, and generate detailed financial reports.
+                    </p>
+                    
+                    <!-- Main Navigation Tabs -->
+                    <ul class="nav nav-pills justify-content-center mb-4" id="mainTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="tax-planning-tab" data-bs-toggle="pill" data-bs-target="#tax-planning" type="button" role="tab" aria-controls="tax-planning" aria-selected="true">
+                                <i class="fas fa-calculator me-2"></i>Tax Planning
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="insurance-tab" data-bs-toggle="pill" data-bs-target="#insurance" type="button" role="tab" aria-controls="insurance" aria-selected="false">
+                                <i class="fas fa-shield-alt me-2"></i>Insurance
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="investments-tab" data-bs-toggle="pill" data-bs-target="#investments" type="button" role="tab" aria-controls="investments" aria-selected="false">
+                                <i class="fas fa-chart-line me-2"></i>Investments
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="calculators-tab" data-bs-toggle="pill" data-bs-target="#calculators" type="button" role="tab" aria-controls="calculators" aria-selected="false">
+                                <i class="fas fa-calculator me-2"></i>Calculators
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tab Content -->
+        <div class="tab-content" id="mainTabContent">
+            <!-- Tax Planning Tab -->
+            <div class="tab-pane fade show active" id="tax-planning" role="tabpanel" aria-labelledby="tax-planning-tab">
+
+        <!-- Form section -->
+        <section class="mb-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0">Your Details</h3>
+                </div>
+                <div class="card-body">
+                    <form id="userDetailsForm">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="fullName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="fullName" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="mobileNumber" class="form-label">Mobile Number</label>
+                                <input type="tel" class="form-control" id="mobileNumber" required pattern="[0-9]{10}">
+                                <div class="form-text">10-digit mobile number</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="emailAddress" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="emailAddress" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tax Calculator section -->
+        <section class="mb-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0">Tax Regime Comparison</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Tax Slabs Info -->
+                    <div class="alert alert-info mb-4">
+                        <h4 class="h6 mb-3">Updated Income Tax Slabs – FY 2025-26</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="h6 fw-bold">New Tax Regime (Default)</h5>
+                                <ul class="list-unstyled mb-3">
+                                    <li><small>₹0 – ₹4,00,000: Nil</small></li>
+                                    <li><small>₹4,00,001 – ₹8,00,000: 5%</small></li>
+                                    <li><small>₹8,00,001 – ₹12,00,000: 10%</small></li>
+                                    <li><small>₹12,00,001 – ₹16,00,000: 15%</small></li>
+                                    <li><small>₹16,00,001 – ₹20,00,000: 20%</small></li>
+                                    <li><small>₹20,00,001 – ₹24,00,000: 25%</small></li>
+                                    <li><small>Above ₹24,00,000: 30%</small></li>
+                                </ul>
+                                <small class="text-muted">Standard Deduction: ₹75,000<br>
+                                Full tax rebate under Section 87A for taxable income up to ₹12 lakh</small>
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="h6 fw-bold">Old Tax Regime (Optional)</h5>
+                                <ul class="list-unstyled mb-3">
+                                    <li><small>₹0 – ₹2,50,000: Nil</small></li>
+                                    <li><small>₹2,50,001 – ₹5,00,000: 5%</small></li>
+                                    <li><small>₹5,00,001 – ₹10,00,000: 20%</small></li>
+                                    <li><small>Above ₹10,00,000: 30%</small></li>
+                                </ul>
+                                <small class="text-muted">Standard Deduction: ₹50,000<br>
+                                Full tax rebate under Section 87A for taxable income up to ₹5 lakh</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form id="taxCalculatorForm">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label for="financialYear" class="form-label">Financial Year</label>
+                                <select class="form-select" id="financialYear" required>
+                                    <option value="2025" selected>FY 2025-26</option>
+                                    <option value="2024">FY 2024-25</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="totalIncome" class="form-label">Total Income (₹)</label>
+                                <input type="number" class="form-control" id="totalIncome" placeholder="Enter your annual income" required min="0">
+                            </div>
+                        </div>
+
+                        <h4 class="h6 mt-4 mb-3">Deductions under Old Regime</h4>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="section80C" class="form-label">Section 80C (PPF, ELSS, LIC, etc.)</label>
+                                <input type="number" class="form-control" id="section80C" placeholder="Max ₹1,50,000" min="0" max="150000">
+                                <div class="form-text">Maximum deduction: ₹1,50,000</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="section80D" class="form-label">Section 80D (Health Insurance)</label>
+                                <input type="number" class="form-control" id="section80D" placeholder="Max ₹75,000" min="0" max="75000">
+                                <div class="form-text">Maximum deduction: ₹25,000 (₹50,000 for parents)</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="homeLoanInterest" class="form-label">Housing Loan Interest (Sec 24B)</label>
+                                <input type="number" class="form-control" id="homeLoanInterest" placeholder="Max ₹2,00,000" min="0" max="200000">
+                                <div class="form-text">Maximum deduction: ₹2,00,000</div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <div class="alert alert-light border">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="standardDeduction" checked disabled>
+                                        <label class="form-check-label" for="standardDeduction">
+                                            Standard Deduction: <span class="text-success">Automatically applied</span>
+                                            <small class="d-block text-muted">₹50,000 (Old Regime) or ₹75,000 (New Regime)</small>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 col-md-6 mx-auto mt-4">
+                            <button type="button" id="calculateTaxBtn" class="btn btn-primary">Compare Tax Regimes</button>
+                        </div>
+                    </form>
+
+                    <div id="taxComparisonResult" class="mt-4" style="display: none;">
+                        <h4 class="h5 mb-3">Tax Comparison Results</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-header">Old Tax Regime</div>
+                                    <div class="card-body">
+                                        <p class="mb-2">Total Income: <span id="oldRegimeTotalIncome" class="fw-bold"></span></p>
+                                        <p class="mb-2">Total Deductions: <span id="oldRegimeTotalDeductions" class="fw-bold"></span></p>
+                                        <p class="mb-2">Taxable Income: <span id="oldRegimeTaxableIncome" class="fw-bold"></span></p>
+                                        <p class="mb-2">Tax Amount: <span id="oldRegimeTaxAmount" class="fw-bold"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-header">New Tax Regime</div>
+                                    <div class="card-body">
+                                        <p class="mb-2">Total Income: <span id="newRegimeTotalIncome" class="fw-bold"></span></p>
+                                        <p class="mb-2">Total Deductions: <span id="newRegimeTotalDeductions" class="fw-bold"></span></p>
+                                        <p class="mb-2">Taxable Income: <span id="newRegimeTaxableIncome" class="fw-bold"></span></p>
+                                        <p class="mb-2">Tax Amount: <span id="newRegimeTaxAmount" class="fw-bold"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert alert-success mt-3">
+                            <h5 class="alert-heading">Recommendation</h5>
+                            <p id="taxRecommendation"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Investment Advice Section -->
+        <section class="mb-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0">Investment Advisory</h3>
+                </div>
+                <div class="card-body">
+                    <h4 class="h6 mb-3">Section 80C Investment Options (Limit: ₹1.5 Lakh)</h4>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header">ELSS Mutual Funds (3-year lock-in)</div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">Axis Long Term Equity Fund</li>
+                                    <li class="list-group-item">Mirae Asset Tax Saver Fund</li>
+                                    <li class="list-group-item">Canara Robeco Equity Tax Saver</li>
+                                    <li class="list-group-item">Tata India Tax Savings Fund</li>
+                                    <li class="list-group-item">DSP Tax Saver Fund</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header">Other 80C Investment Options</div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">PPF (Public Provident Fund) - 15-year lock-in</li>
+                                    <li class="list-group-item">NSC (National Savings Certificate)</li>
+                                    <li class="list-group-item">5-Year Tax Saving FD (Bank Fixed Deposit)</li>
+                                    <li class="list-group-item">Sukanya Samriddhi Yojana (for girl child)</li>
+                                    <li class="list-group-item">Life Insurance Premium (LIC, HDFC Life, etc.)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="h6 mb-3 mt-4">Section 80D - Health Insurance Premium</h4>
+                    <div class="card mb-3">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Self & Family (below 60 years): up to ₹25,000</li>
+                            <li class="list-group-item">Parents (below 60): ₹25,000 | Senior Citizen: ₹50,000</li>
+                            <li class="list-group-item">Preventive Health Check-up: within overall limit of ₹5,000</li>
+                        </ul>
+                    </div>
+
+                    <h4 class="h6 mb-3 mt-4">Other Popular Deductions</h4>
+                    <div class="card mb-3">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Section 24(b): Home loan interest deduction up to ₹2,00,000 (self-occupied)</li>
+                            <li class="list-group-item">Section 80E: Interest on Education Loan (no limit)</li>
+                            <li class="list-group-item">Section 80G: Donations to eligible charities (50%-100% deduction)</li>
+                            <li class="list-group-item">Section 80U/80DD: Deduction for disability (self or dependent)</li>
+                        </ul>
+                    </div>
+
+                    <div id="personalized-advice" class="mt-4 d-none">
+                        <h4 class="h5 mb-3">Personalized Investment Advice</h4>
+                        <div class="alert alert-info" id="investment-suggestions">
+                            <p>Based on your profile, we recommend the following tax-saving investments:</p>
+                            <div id="advice-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Data Section -->
+        <section class="mb-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0">Market Performance</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 mb-4">
+                            <h5 class="mb-3">NIFTY & SENSEX Performance (Last 5 Years)</h5>
+                            <div class="chart-container">
+                                <canvas id="marketChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <h5 class="mb-3">NIFTY 50 Returns</h5>
+                            <div class="chart-container">
+                                <canvas id="niftyReturnsChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h5 class="mb-3">SENSEX Returns</h5>
+                            <div class="chart-container">
+                                <canvas id="sensexReturnsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Export Options Section -->
+        <section class="mb-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0">Export Reports</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 text-center">
+                            <div class="p-4">
+                                <i class="fas fa-file-pdf fa-4x mb-3 text-danger"></i>
+                                <h5>Download PDF Report</h5>
+                                <p>Get a detailed PDF report with tax calculations and investment suggestions.</p>
+                                <button id="downloadPdfBtn" class="btn btn-outline-danger" disabled>
+                                    <i class="fas fa-download me-2"></i>Download PDF Report
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Excel export removed as requested -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="mb-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0">Contact for Investment & Tax Filing Assistance</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Income Tax Return Filing for Individuals:</h5>
+                            <p>Affordable Price: ₹499 to ₹1,500 (Based on complexity)</p>
+                            <h5 class="mt-4">Contact:</h5>
+                            <p>
+                                <strong>Name:</strong> Tax Planner Team<br>
+                                <strong>Mobile:</strong> +91-98765-43210<br>
+                                <strong>Email:</strong> support@taxplanner.in
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Get help with:</h5>
+                            <ul>
+                                <li>Investment planning in ELSS, PPF, Insurance</li>
+                                <li>Health & Term Insurance</li>
+                                <li>Tax saving under 80C/80D</li>
+                                <li>Hassle-free ITR filing with expert help</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+            </div> <!-- End of Tax Planning Tab -->
+            
+            <!-- Insurance Tab -->
+            <div class="tab-pane fade" id="insurance" role="tabpanel" aria-labelledby="insurance-tab">
+                <!-- Insurance section -->
+                <section class="mb-5">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="h5 mb-0">Insurance Plans Comparison</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="insuranceSearchForm" class="row justify-content-center g-3 mb-4">
+                                <div class="col-md-3">
+                                    <select class="form-select" id="insuranceType" required>
+                                        <option value="">Select Insurance Type</option>
+                                        <option value="health">Health Insurance</option>
+                                        <option value="term">Term Life Insurance</option>
+                                        <option value="car">Car Insurance</option>
+                                        <option value="travel">Travel Insurance</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" class="form-control" id="coverageAmount" placeholder="Coverage Amount" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="tel" class="form-control" id="mobileNumber" placeholder="Mobile Number" required pattern="[0-9]{10}">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-search me-2"></i>Compare Plans
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <div id="insurance-features" class="row mb-4">
+                                <div class="col-md-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-heartbeat fa-3x mb-3 text-primary"></i>
+                                            <h5>Health Insurance</h5>
+                                            <p class="small">Comprehensive coverage for you and your family's healthcare needs</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-shield-alt fa-3x mb-3 text-primary"></i>
+                                            <h5>Term Insurance</h5>
+                                            <p class="small">Protect your family's financial future with the right coverage</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-car fa-3x mb-3 text-primary"></i>
+                                            <h5>Car Insurance</h5>
+                                            <p class="small">Comprehensive or third-party coverage for your vehicle</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-plane fa-3x mb-3 text-primary"></i>
+                                            <h5>Travel Insurance</h5>
+                                            <p class="small">Stay protected during your domestic or international travel</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="insuranceResults" class="mt-4" style="display: none;">
+                                <h4 class="h5 mb-3">Top Recommended Plans</h4>
+                                <div class="filter-section mb-3 p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Sort by:</label>
+                                            <select class="form-select" id="insuranceSortBy">
+                                                <option value="premium">Premium (Low to High)</option>
+                                                <option value="coverage">Coverage (High to Low)</option>
+                                                <option value="rating">Rating (High to Low)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Filter by Provider:</label>
+                                            <select class="form-select" id="insuranceProvider">
+                                                <option value="">All Providers</option>
+                                                <option value="hdfc">HDFC ERGO</option>
+                                                <option value="bajaj">Bajaj Allianz</option>
+                                                <option value="star">Star Health</option>
+                                                <option value="lic">LIC</option>
+                                                <option value="icici">ICICI Lombard</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Coverage Amount:</label>
+                                            <div id="coverageSlider"></div>
+                                            <div class="d-flex justify-content-between">
+                                                <small id="minCoverage">₹5 Lakhs</small>
+                                                <small id="maxCoverage">₹1 Crore</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="insurancePlansList">
+                                    <!-- Sample Plan Cards for Health Insurance -->
+                                    <div class="plan-card row align-items-center">
+                                        <div class="col-md-3">
+                                            <img src="https://via.placeholder.com/120x60?text=HDFC+ERGO" alt="HDFC ERGO" class="img-fluid mb-2">
+                                            <div>
+                                                <span class="rating-stars">★★★★☆</span>
+                                                <small class="rating-count">(483 reviews)</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <h5>HDFC ERGO Health Suraksha</h5>
+                                            <div class="mb-2">
+                                                <span class="feature-tag">No-Claim Bonus</span>
+                                                <span class="feature-tag">Cashless Hospitals</span>
+                                                <span class="feature-tag">Pre-existing Cover</span>
+                                            </div>
+                                            <ul class="small">
+                                                <li>Sum Insured: ₹5 Lakhs</li>
+                                                <li>Free Health Check-up</li>
+                                                <li>7500+ Network Hospitals</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-2 text-center">
+                                            <h5 class="text-primary">₹12,456</h5>
+                                            <small class="text-muted d-block">per year</small>
+                                            <small class="text-success">Save 15%</small>
+                                        </div>
+                                        <div class="col-md-2 text-center">
+                                            <button class="btn btn-outline-primary mb-2 w-100">View Details</button>
+                                            <button class="btn btn-primary w-100">Buy Now</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="plan-card row align-items-center mt-3 plan-highlight">
+                                        <div class="col-md-3">
+                                            <img src="https://via.placeholder.com/120x60?text=Star+Health" alt="Star Health" class="img-fluid mb-2">
+                                            <div>
+                                                <span class="rating-stars">★★★★★</span>
+                                                <small class="rating-count">(721 reviews)</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <h5>Star Comprehensive Insurance</h5>
+                                            <div class="mb-2">
+                                                <span class="feature-tag">Room Rent Waiver</span>
+                                                <span class="feature-tag">Direct Claim</span>
+                                                <span class="feature-tag">Day 1 Coverage</span>
+                                            </div>
+                                            <ul class="small">
+                                                <li>Sum Insured: ₹5 Lakhs</li>
+                                                <li>No Co-payment</li>
+                                                <li>11000+ Network Hospitals</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-2 text-center">
+                                            <h5 class="text-primary">₹11,299</h5>
+                                            <small class="text-muted d-block">per year</small>
+                                            <small class="text-success">Save 20%</small>
+                                        </div>
+                                        <div class="col-md-2 text-center">
+                                            <button class="btn btn-outline-primary mb-2 w-100">View Details</button>
+                                            <button class="btn btn-primary w-100">Buy Now</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="plan-card row align-items-center mt-3">
+                                        <div class="col-md-3">
+                                            <img src="https://via.placeholder.com/120x60?text=Bajaj+Allianz" alt="Bajaj Allianz" class="img-fluid mb-2">
+                                            <div>
+                                                <span class="rating-stars">★★★★☆</span>
+                                                <small class="rating-count">(529 reviews)</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <h5>Bajaj Allianz Health Guard</h5>
+                                            <div class="mb-2">
+                                                <span class="feature-tag">Tax Benefits</span>
+                                                <span class="feature-tag">Lifetime Renewal</span>
+                                                <span class="feature-tag">Air Ambulance</span>
+                                            </div>
+                                            <ul class="small">
+                                                <li>Sum Insured: ₹5 Lakhs</li>
+                                                <li>Wellness Program Included</li>
+                                                <li>6800+ Network Hospitals</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-2 text-center">
+                                            <h5 class="text-primary">₹13,750</h5>
+                                            <small class="text-muted d-block">per year</small>
+                                            <small class="text-success">Save 10%</small>
+                                        </div>
+                                        <div class="col-md-2 text-center">
+                                            <button class="btn btn-outline-primary mb-2 w-100">View Details</button>
+                                            <button class="btn btn-primary w-100">Buy Now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div> <!-- End of Insurance Tab -->
+            
+            <!-- Investments Tab -->
+            <div class="tab-pane fade" id="investments" role="tabpanel" aria-labelledby="investments-tab">
+                <!-- Investments section -->
+                <section class="mb-5">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="h5 mb-0">Mutual Fund Investments</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="mutualFundSearchForm" class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label for="fundCategory" class="form-label">Fund Category</label>
+                                    <select class="form-select" id="fundCategory">
+                                        <option value="">All Categories</option>
+                                        <option value="equity">Equity</option>
+                                        <option value="debt">Debt</option>
+                                        <option value="hybrid">Hybrid</option>
+                                        <option value="tax-saving">Tax Saving (ELSS)</option>
+                                        <option value="index">Index Funds</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="investmentDuration" class="form-label">Investment Horizon</label>
+                                    <select class="form-select" id="investmentDuration">
+                                        <option value="">All Durations</option>
+                                        <option value="short">Short Term (0-3 years)</option>
+                                        <option value="medium">Medium Term (3-7 years)</option>
+                                        <option value="long">Long Term (7+ years)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="riskProfile" class="form-label">Risk Profile</label>
+                                    <select class="form-select" id="riskProfile">
+                                        <option value="">All Risk Profiles</option>
+                                        <option value="low">Low Risk</option>
+                                        <option value="moderate">Moderate Risk</option>
+                                        <option value="high">High Risk</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="btn btn-primary px-4">
+                                        <i class="fas fa-filter me-2"></i>Filter Funds
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <h4 class="h6 mt-4 mb-3">Top Performing ELSS Funds (Tax Saving)</h4>
+                            <div class="table-responsive">
+                                <table class="table table-hover scheme-table">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Fund Name</th>
+                                            <th>Category</th>
+                                            <th>1 Yr Return</th>
+                                            <th>3 Yr Return</th>
+                                            <th>5 Yr Return</th>
+                                            <th>Expense Ratio</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div>Axis Long Term Equity Fund</div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-primary">ELSS</span></td>
+                                            <td><span class="return-pill">24.3%</span></td>
+                                            <td><span class="return-pill">18.7%</span></td>
+                                            <td><span class="return-pill">15.2%</span></td>
+                                            <td>1.7%</td>
+                                            <td><button class="btn btn-sm btn-outline-primary">Invest</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div>Mirae Asset Tax Saver Fund</div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-primary">ELSS</span></td>
+                                            <td><span class="return-pill">25.7%</span></td>
+                                            <td><span class="return-pill">19.2%</span></td>
+                                            <td><span class="return-pill">16.8%</span></td>
+                                            <td>1.8%</td>
+                                            <td><button class="btn btn-sm btn-outline-primary">Invest</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div>Canara Robeco Equity Tax Saver</div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-primary">ELSS</span></td>
+                                            <td><span class="return-pill">23.1%</span></td>
+                                            <td><span class="return-pill">17.5%</span></td>
+                                            <td><span class="return-pill">14.9%</span></td>
+                                            <td>1.9%</td>
+                                            <td><button class="btn btn-sm btn-outline-primary">Invest</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div>DSP Tax Saver Fund</div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-primary">ELSS</span></td>
+                                            <td><span class="return-pill">21.8%</span></td>
+                                            <td><span class="return-pill">16.9%</span></td>
+                                            <td><span class="return-pill">14.3%</span></td>
+                                            <td>1.8%</td>
+                                            <td><button class="btn btn-sm btn-outline-primary">Invest</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div>Tata India Tax Savings Fund</div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-primary">ELSS</span></td>
+                                            <td><span class="return-pill">22.5%</span></td>
+                                            <td><span class="return-pill">17.1%</span></td>
+                                            <td><span class="return-pill">14.7%</span></td>
+                                            <td>1.9%</td>
+                                            <td><button class="btn btn-sm btn-outline-primary">Invest</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div> <!-- End of Investments Tab -->
+            
+            <!-- Calculators Tab -->
+            <div class="tab-pane fade" id="calculators" role="tabpanel" aria-labelledby="calculators-tab">
+                <!-- Investment Projection Chart -->
+                <section class="mb-5">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="h5 mb-0">10% Monthly Income Investment Projection</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-4">This chart shows how 10% of your monthly income (₹10,000/month) would grow over 5 years with different investment options at 15% annual return.</p>
+                            <div class="chart-container" style="height: 400px;">
+                                <canvas id="investmentProjectionChart"></canvas>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-md-3">
+                                    <div class="card bg-light">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Equity Funds</h5>
+                                            <p class="card-text">Expected CAGR: 15%</p>
+                                            <p class="h4 text-primary">₹8.05L</p>
+                                            <small>After 5 years</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card bg-light">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Hybrid Funds</h5>
+                                            <p class="card-text">Expected CAGR: 12%</p>
+                                            <p class="h4 text-primary">₹7.47L</p>
+                                            <small>After 5 years</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card bg-light">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Gold ETF</h5>
+                                            <p class="card-text">Expected CAGR: 8%</p>
+                                            <p class="h4 text-primary">₹6.73L</p>
+                                            <small>After 5 years</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card bg-light">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">Term Insurance + ELSS</h5>
+                                            <p class="card-text">Expected CAGR: 11%</p>
+                                            <p class="h4 text-primary">₹7.29L</p>
+                                            <small>After 5 years</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- SIP Calculator -->
+                <section class="mb-5">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="h5 mb-0">SIP Calculator</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <form id="sipCalculatorForm">
+                                        <div class="mb-3">
+                                            <label for="sipAmount" class="form-label">Monthly Investment (₹)</label>
+                                            <input type="number" class="form-control" id="sipAmount" value="5000" min="500">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="sipDuration" class="form-label">Investment Period (Years)</label>
+                                            <input type="number" class="form-control" id="sipDuration" value="15" min="1" max="30">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="sipReturn" class="form-label">Expected Annual Return (%)</label>
+                                            <input type="number" class="form-control" id="sipReturn" value="12" min="1" max="30">
+                                        </div>
+                                        <button type="button" id="calculateSIP" class="btn btn-primary">Calculate Returns</button>
+                                    </form>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="sipResult" class="calculator-result text-center p-4 h-100">
+                                        <h4 class="mb-4">Your SIP Investment Results</h4>
+                                        <div class="row">
+                                            <div class="col-6 mb-3">
+                                                <h5>Invested Amount</h5>
+                                                <p class="h4" id="totalInvested">₹9,00,000</p>
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <h5>Estimated Returns</h5>
+                                                <p class="h4 text-success" id="estimatedReturns">₹16,89,000</p>
+                                            </div>
+                                            <div class="col-12 mt-2">
+                                                <h5>Future Value</h5>
+                                                <p class="h3 text-primary" id="sipFutureValue">₹25,89,000</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- SWP Calculator -->
+                <section class="mb-5">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="h5 mb-0">SWP Calculator</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <form id="swpCalculatorForm">
+                                        <div class="mb-3">
+                                            <label for="initialInvestment" class="form-label">Initial Investment (₹)</label>
+                                            <input type="number" class="form-control" id="initialInvestment" value="1000000" min="100000">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="monthlyWithdrawal" class="form-label">Monthly Withdrawal (₹)</label>
+                                            <input type="number" class="form-control" id="monthlyWithdrawal" value="8334" min="1000">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="swpDuration" class="form-label">Withdrawal Period (Years)</label>
+                                            <input type="number" class="form-control" id="swpDuration" value="10" min="1" max="30">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="swpReturn" class="form-label">Expected Annual Return (%)</label>
+                                            <input type="number" class="form-control" id="swpReturn" value="15" min="1" max="30">
+                                        </div>
+                                        <button type="button" id="calculateSWP" class="btn btn-primary">Calculate SWP</button>
+                                    </form>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="swpResult" class="calculator-result text-center p-4 h-100">
+                                        <h4 class="mb-4">Your SWP Results</h4>
+                                        <div class="row">
+                                            <div class="col-6 mb-3">
+                                                <h5>Initial Investment</h5>
+                                                <p class="h4" id="swpInitialAmount">₹10,00,000</p>
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <h5>Total Withdrawals</h5>
+                                                <p class="h4" id="totalWithdrawals">₹12,00,000</p>
+                                            </div>
+                                            <div class="col-12 mt-2">
+                                                <h5>Remaining Corpus</h5>
+                                                <p class="h3 text-primary" id="remainingCorpus">₹13,89,000</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div> <!-- End of Calculators Tab -->
+        </div>
+    </main>
+
+    <!-- Hidden div for PDF generation -->
+    <div id="pdf-content" style="display: none;">
+        <!-- This will be populated with content for PDF export -->
+    </div>
+    
+    <!-- Hidden div for compact PDF generation -->
+    <div id="compact-pdf-content" style="display: none;">
+        <!-- This will be populated with content for compact PDF export -->
+        <div>
+            <canvas id="compactMarketChart"></canvas>
+            <canvas id="compactProjectionChart"></canvas>
+        </div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- html2canvas for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/tax-calculator.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chart-data.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/working-pdf-generator.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/investment-calculators.js') }}"></script>
+</body>
+</html>
